@@ -7,4 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="tests\" />
+    <Folder Include="src\Domain\" />
+    <Folder Include="src\Data\" />
+    <Folder Include="src\ConsoleApp\" />
+    <Folder Include="src\Services\" />
+  </ItemGroup>
+
 </Project>
