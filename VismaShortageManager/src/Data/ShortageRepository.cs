@@ -25,17 +25,13 @@ namespace VismaShortageManager.src.Data
         {
             try
             {
-                if (!File.Exists(_filePath))
-                {
-                    return new List<Shortage>();
-                }
-
-                var jsonData = File.ReadAllText(_filePath);
-                return JsonSerializer.Deserialize<List<Shortage>>(jsonData, new JsonSerializerOptions
+                var jsonData = JsonFileHandler.ReadJsonFromFile(_filePath);
+                var all_shortages = string.IsNullOrEmpty(jsonData) ? new List<Shortage>() : JsonSerializer.Deserialize<List<Shortage>>(jsonData, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                     Converters = { new JsonStringEnumConverter() }
-                }) ?? new List<Shortage>();
+                });
+                return all_shortages;
             }
             catch (Exception ex)
             {
@@ -58,7 +54,7 @@ namespace VismaShortageManager.src.Data
                     WriteIndented = true,
                     Converters = { new JsonStringEnumConverter() }
                 });
-                File.WriteAllText(_filePath, jsonData);
+                JsonFileHandler.WriteJsonToFile(_filePath, jsonData);
             }
             catch (Exception ex)
             {
