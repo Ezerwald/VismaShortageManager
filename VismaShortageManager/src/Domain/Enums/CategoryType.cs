@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace VismaShortageManager.src.Domain.Enums
 {
-    internal class Class2
+    public enum CategoryType
     {
+        Electronics,
+        Food,
+        Other
     }
 }

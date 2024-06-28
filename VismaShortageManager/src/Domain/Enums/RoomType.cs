@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace VismaShortageManager.src.Domain.Enums
 {
-    internal class Class1
+    public enum RoomType
     {
+        MeetingRoom,
+        Kitchen,
+        Bathroom
     }
 }
