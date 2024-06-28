@@ -21,17 +21,16 @@ namespace VismaShortageManager.src.Data
         /// Reads all shortages from the JSON file.
         /// </summary>
         /// <returns>A list of shortages.</returns>
-        public List<Shortage> GetAllShortages()
+        public List<Shortage>? GetAllShortages()
         {
             try
             {
                 var jsonData = JsonFileHandler.ReadJsonFromFile(_filePath);
-                var all_shortages = string.IsNullOrEmpty(jsonData) ? new List<Shortage>() : JsonSerializer.Deserialize<List<Shortage>>(jsonData, new JsonSerializerOptions
+                return string.IsNullOrEmpty(jsonData) ? new List<Shortage>() : JsonSerializer.Deserialize<List<Shortage>>(jsonData, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                     Converters = { new JsonStringEnumConverter() }
                 });
-                return all_shortages;
             }
             catch (Exception ex)
             {

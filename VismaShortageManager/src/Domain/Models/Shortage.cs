@@ -10,11 +10,11 @@ namespace VismaShortageManager.src.Domain.Models
 {
     public class Shortage
     {
-        public required string Title { get; set; }  // Title of shortage request
+        public string Title { get; set; }  // Title of shortage request
         public RoomType Room { get; set; }  // Room where shortage appear
         public CategoryType Category { get; set; }  // Category of shortage request
         public int Priority { get; set; }   // Priority of request
         public DateTime CreatedOn { get; set; } // Track the date of request creation
-        public required string CreatedBy { get; set; }  // Track the creator of request
+        public string CreatedBy { get; set; }  // Track the creator of request
     }
 }
