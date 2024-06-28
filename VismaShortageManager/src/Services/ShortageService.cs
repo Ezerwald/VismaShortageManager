@@ -88,7 +88,7 @@ namespace VismaShortageManager.src.Services
         /// <param name="filterCategory">Optional category filter.</param>
         /// <param name="filterRoom">Optional room filter.</param>
         /// <returns>A list of shortages matching the filters.</returns>
-        public List<Shortage> ListShortages(User user, string filterTitle = null, DateTime? filterDateStart = null, DateTime? filterDateEnd = null, CategoryType? filterCategory = null, RoomType? filterRoom = null)
+        public List<Shortage> ListShortages(User user, string? filterTitle = null, DateTime? filterDateStart = null, DateTime? filterDateEnd = null, CategoryType? filterCategory = null, RoomType? filterRoom = null)
         {
             var shortages = _repository.GetAllShortages();
 
