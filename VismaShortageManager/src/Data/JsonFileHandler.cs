@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VismaShortageManager.src.Data
+﻿namespace VismaShortageManager.src.Data
 {
     public static class JsonFileHandler
     {

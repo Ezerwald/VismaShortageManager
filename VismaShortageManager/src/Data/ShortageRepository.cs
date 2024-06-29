@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;

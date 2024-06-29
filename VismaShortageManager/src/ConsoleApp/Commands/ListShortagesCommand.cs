@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
@@ -58,10 +53,16 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
         {
             Console.Clear();
             ShowCurrentFilters();
-            Console.WriteLine("1. Add filter");
-            Console.WriteLine("2. Clear filters");
-            Console.WriteLine("3. Show results");
-            Console.WriteLine("4. Back to main menu");
+
+            UIHelper.ShowOptionsMenu(
+                new List<string>
+                {
+                    "1. Add filter",
+                    "2. Clear filters",
+                    "3. Show results",
+                    "4. Back to main menu"
+                }
+            );
         }
 
         private void ShowCurrentFilters()
@@ -78,11 +79,17 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
         private void AddFilter()
         {
             UIHelper.SeparateMessage();
-            Console.WriteLine("Select filter to add:");
-            Console.WriteLine("1. Title");
-            Console.WriteLine("2. CreatedOn Date Range");
-            Console.WriteLine("3. Category");
-            Console.WriteLine("4. Room");
+            UIHelper.ShowOptionsMenu(
+                title: "Select filter to add:",
+                options: new List<string>
+                {
+                    "1. Title",
+                    "2. CreatedOn Date Range",
+                    "3. Category",
+                    "4. Room"
+                }
+            );
+
             var filterChoice = Console.ReadLine();
 
             switch (filterChoice)
@@ -135,10 +142,16 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
             }
 
             UIHelper.SeparateMessage();
-            Console.WriteLine("1. Delete a shortage");
-            Console.WriteLine("2. Back to filter menu");
+            UIHelper.ShowOptionsMenu(
+                new List<string>
+                {
+                    "1. Delete a shortage",
+                    "2. Back to filter menu"
+                }
+            );
 
             var choice = Console.ReadLine();
+            UIHelper.SeparateMessage();
             switch (choice)
             {
                 case "1":

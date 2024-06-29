@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
 using VismaShortageManager.src.Data;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Services;
@@ -10,7 +9,7 @@ namespace VismaShortageManager.src.ConsoleApp
     {
         public static void Main(string[] args)
         {
-            // Setup DI
+            // Setup Dependency Injection
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<IShortageRepository>(new ShortageRepository("shortages.json"))
                 .AddTransient<ShortageService>()

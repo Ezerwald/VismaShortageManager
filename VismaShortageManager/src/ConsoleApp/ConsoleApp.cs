@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VismaShortageManager.src.Services;
+﻿using VismaShortageManager.src.Services;
 using VismaShortageManager.src.ConsoleApp.Commands;
 using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Models;
@@ -36,19 +31,26 @@ namespace VismaShortageManager.src.ConsoleApp
                 Name = name,
                 IsAdministrator = isAdmin
             };
-
-            Console.WriteLine($"Welcome, {_currentUser.Name}. Administrator status: {_currentUser.IsAdministrator}");
+            
+            Console.Clear();
         }
 
         private void ShowMainMenu()
         {
             while (true)
             {
-                Console.WriteLine("Main Menu:");
-                Console.WriteLine("1. Register new shortage");
-                Console.WriteLine("2. Delete shortage");
-                Console.WriteLine("3. List all requests");
-                Console.WriteLine("4. Exit");
+                Console.Clear();
+                Console.WriteLine($"Username: {_currentUser.Name}   Administrator status: {_currentUser.IsAdministrator}");
+                UIHelper.ShowOptionsMenu(
+                    title: "Main Menu:",
+                    options: new List<string>
+                    {
+                        "1. Register new shortage",
+                        "2. Delete shortage",
+                        "3. List all requests",
+                        "4. Exit"
+                    }
+                );
 
                 var choice = Console.ReadLine();
 
@@ -68,7 +70,7 @@ namespace VismaShortageManager.src.ConsoleApp
                     case "4":
                         return;
                     default:
-                        Console.WriteLine("Invalid option, please try again.");
+                        UIHelper.ShowInvalidInputResponse();
                         break;
                 }
             }

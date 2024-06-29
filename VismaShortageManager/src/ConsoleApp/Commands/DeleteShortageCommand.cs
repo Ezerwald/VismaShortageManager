@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
@@ -36,11 +31,16 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
         {
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("1. Delete one more shortage");
-                Console.WriteLine("2. Back to menu");
+                UIHelper.ShowOptionsMenu(
+                    new List<string>
+                    {
+                        "1. Delete one more shortage",
+                        "2. Back to menu"
+                    }
+                );
 
                 var choice = Console.ReadLine();
+                UIHelper.SeparateMessage();
                 switch (choice)
                 {
                     case "1":

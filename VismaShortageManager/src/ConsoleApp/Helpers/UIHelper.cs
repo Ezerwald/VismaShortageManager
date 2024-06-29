@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VismaShortageManager.src.ConsoleApp.Helpers
+﻿namespace VismaShortageManager.src.ConsoleApp.Helpers
 {
     public static class UIHelper
     {
@@ -41,7 +39,7 @@ namespace VismaShortageManager.src.ConsoleApp.Helpers
         /// <param name="message">The warning message to display.</param>
         public static void ShowWarningMessage(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ResetColor();
         }
@@ -52,7 +50,7 @@ namespace VismaShortageManager.src.ConsoleApp.Helpers
         /// <param name="message">The informational message to display.</param>
         public static void ShowInfoMessage(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(message);
             Console.ResetColor();
         }
@@ -61,18 +59,13 @@ namespace VismaShortageManager.src.ConsoleApp.Helpers
         /// Displays menu with several options.
         /// </summary>
         /// <param name="options">List of options to display.</param>
-        /// <param name="message">The informational message to display.</param>
-        public static void ShowOptions(List<string> options, string message = "")
+        /// <param name="title">The menu's title to display.</param>
+        public static void ShowOptionsMenu(List<string> options, string title = "")
         {
-            var i = 1;
-
-            Console.WriteLine(message);
-
+            Console.WriteLine(title);
             foreach (string option in options)
             {
-                Console.WriteLine($"{i}. {option}");
-                i++;
-            }
+                Console.WriteLine($"{option}");            }
         }
 
     }

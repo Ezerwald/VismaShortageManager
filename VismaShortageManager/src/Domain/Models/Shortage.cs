@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using VismaShortageManager.src.Domain.Enums;
+﻿using VismaShortageManager.src.Domain.Enums;
 
 namespace VismaShortageManager.src.Domain.Models
 {

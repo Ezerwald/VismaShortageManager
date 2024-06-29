@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
@@ -39,8 +34,8 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
             };
 
             _shortageService.AddShortage(shortage);
-            Console.WriteLine("Shortage added successfully.");
 
+            UIHelper.SeparateMessage();
             ShowPostActionMenu();
         }
 
@@ -48,10 +43,16 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
         {
             while (true)
             {
-                Console.WriteLine("1. Register one more shortage");
-                Console.WriteLine("2. Back to main menu");
+                UIHelper.ShowOptionsMenu(
+                    new List<string>
+                    {
+                        "1. Register one more shortage",
+                        "2. Back to main menu"
+                    }
+                );
 
                 var choice = Console.ReadLine();
+                UIHelper.SeparateMessage();
                 switch (choice)
                 {
                     case "1":

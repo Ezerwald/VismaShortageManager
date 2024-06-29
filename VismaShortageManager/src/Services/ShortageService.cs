@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
@@ -63,7 +60,7 @@ namespace VismaShortageManager.src.Services
 
             if (shortage == null)
             {
-                Console.WriteLine("Shortage not found.");
+                UIHelper.ShowInfoMessage("Shortage not found.");
                 return;
             }
 
@@ -75,7 +72,7 @@ namespace VismaShortageManager.src.Services
             }
             else
             {
-                Console.WriteLine("You do not have permission to delete this shortage.");
+                UIHelper.ShowWarningMessage("You do not have permission to delete this shortage.");
             }
         }
 
