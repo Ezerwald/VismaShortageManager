@@ -55,9 +55,11 @@ namespace VismaShortageManager.src.ConsoleApp
                 switch (choice)
                 {
                     case "1":
+                        Console.Clear();
                         new AddShortageCommand(_shortageService, _currentUser).Execute();
                         break;
                     case "2":
+                        Console.Clear();
                         new DeleteShortageCommand(_shortageService, _currentUser).Execute();
                         break;
                     case "3":

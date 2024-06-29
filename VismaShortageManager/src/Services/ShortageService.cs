@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
@@ -33,11 +34,11 @@ namespace VismaShortageManager.src.Services
                     shortages.Remove(existingShortage);
                     shortages.Add(shortage);
                     _repository.SaveShortages(shortages);
-                    Console.WriteLine("Shortage updated due to higher priority.");
+                    UIHelper.ShowSuccessMessage("Shortage updated due to higher priority.");
                 }
                 else
                 {
-                    Console.WriteLine("Shortage already exists with equal or higher priority.");
+                    UIHelper.ShowInfoMessage("Shortage already exists with equal or higher priority.");
                 }
             }
             else
@@ -45,7 +46,7 @@ namespace VismaShortageManager.src.Services
                 // Add new shortage
                 shortages.Add(shortage);
                 _repository.SaveShortages(shortages);
-                Console.WriteLine("Shortage added successfully.");
+                UIHelper.ShowSuccessMessage("Shortage added successfully.");
             }
         }
 
@@ -70,7 +71,7 @@ namespace VismaShortageManager.src.Services
             {
                 shortages.Remove(shortage);
                 _repository.SaveShortages(shortages);
-                Console.WriteLine("Shortage deleted successfully.");
+                UIHelper.ShowSuccessMessage("Shortage deleted successfully.");
             }
             else
             {

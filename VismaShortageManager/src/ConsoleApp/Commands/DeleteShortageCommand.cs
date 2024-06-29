@@ -27,7 +27,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
             var room = InputParser.ParseEnum<RoomType>().ToString();
 
             _shortageService.DeleteShortage(title, room, _currentUser);
-            Console.WriteLine("Shortage deleted successfully.");
+            UIHelper.SeparateMessage();
 
             ShowPostActionMenu();
         }
@@ -36,8 +36,9 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
         {
             while (true)
             {
+                Console.WriteLine();
                 Console.WriteLine("1. Delete one more shortage");
-                Console.WriteLine("2. Back to main menu");
+                Console.WriteLine("2. Back to menu");
 
                 var choice = Console.ReadLine();
                 switch (choice)
@@ -48,7 +49,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                     case "2":
                         return;
                     default:
-                        Console.WriteLine("Invalid option, please try again.");
+                        UIHelper.ShowInvalidInputResponse();
                         break;
                 }
             }

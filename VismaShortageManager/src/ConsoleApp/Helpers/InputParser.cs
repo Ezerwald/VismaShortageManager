@@ -82,6 +82,21 @@ namespace VismaShortageManager.src.ConsoleApp.Helpers
         }
 
         /// <summary>
+        /// Prompts the user for a non-empty string.
+        /// </summary>
+        /// <param name="prompt">The prompt message to display.</param>
+        /// <returns>The entered string.</returns>
+        public static string ParseAnyString(string prompt)
+        {
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                var input = Console.ReadLine();
+                return input;
+            }
+        }
+
+        /// <summary>
         /// Prompts the user for a boolean value (yes/no).
         /// </summary>
         /// <param name="prompt">The prompt message to display.</param>
