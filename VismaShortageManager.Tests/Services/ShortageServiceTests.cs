@@ -2,10 +2,6 @@
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
-using Xunit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using VismaShortageManager.src.Domain.Enums;
 
 namespace VismaShortageManager.Tests.Services

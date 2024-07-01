@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VismaShortageManager.src.ConsoleApp.Helpers
+﻿namespace VismaShortageManager.src.ConsoleApp.Helpers
 {
     public interface IInputParserMethods
     {
