@@ -54,19 +54,5 @@
             Console.WriteLine(message);
             Console.ResetColor();
         }
-
-        /// <summary>
-        /// Displays menu with several options.
-        /// </summary>
-        /// <param name="options">List of options to display.</param>
-        /// <param name="title">The menu's title to display.</param>
-        public static void ShowOptionsMenu(List<string> options, string title = "")
-        {
-            Console.WriteLine(title);
-            foreach (string option in options)
-            {
-                Console.WriteLine($"{option}");            }
-        }
-
     }
 }
