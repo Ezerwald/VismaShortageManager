@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using VismaShortageManager.src.ConsoleApp.Commands;
+﻿using VismaShortageManager.src.ConsoleApp.Commands;
 using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Models;
-using VismaShortageManager.src.Services;
-using VismaShortageManager.src.Domain.Interfaces;
-using System.Xml.Serialization;
 
 namespace VismaShortageManager.src.ConsoleApp
 {

@@ -1,6 +1,4 @@
-﻿using VismaShortageManager.src.Domain.Interfaces;
-
-namespace VismaShortageManager.src.ConsoleApp.Helpers
+﻿namespace VismaShortageManager.src.ConsoleApp.Helpers
 {
     public static class InputParserMethods
     {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
