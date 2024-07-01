@@ -6,22 +6,22 @@
         /// Prompts the user for a valid enum value by presenting a numbered list of options.
         /// </summary>
         /// <typeparam name="T">The enum type.</typeparam>
+        /// <param name="prompt">Optional prompt message to display.</param>
         /// <returns>The selected enum value.</returns>
         public static T ParseEnum<T>(string? prompt = null) where T : struct, Enum
         {
             while (true)
             {
-                if (prompt != null)
+                if (!string.IsNullOrEmpty(prompt))
                 {
                     Console.WriteLine(prompt);
                 }
                 Console.WriteLine($"Select {typeof(T).Name}:");
+
                 var enumValues = Enum.GetValues(typeof(T));
-                int i = 1;
-                foreach (var value in enumValues)
+                for (int i = 0; i < enumValues.Length; i++)
                 {
-                    Console.WriteLine($"{i}. {value}");
-                    i++;
+                    Console.WriteLine($"{i + 1}. {enumValues.GetValue(i)}");
                 }
 
                 if (int.TryParse(Console.ReadLine(), out int selectedIndex) &&
@@ -76,18 +76,14 @@
         }
 
         /// <summary>
-        /// Prompts the user for a non-empty string.
+        /// Prompts the user for any string, including an empty one.
         /// </summary>
         /// <param name="prompt">The prompt message to display.</param>
         /// <returns>The entered string.</returns>
         public static string ParseAnyString(string prompt)
         {
-            while (true)
-            {
-                Console.WriteLine(prompt);
-                var input = Console.ReadLine();
-                return input;
-            }
+            Console.WriteLine(prompt);
+            return Console.ReadLine();
         }
 
         /// <summary>
@@ -140,5 +136,3 @@
         }
     }
 }
-
-
