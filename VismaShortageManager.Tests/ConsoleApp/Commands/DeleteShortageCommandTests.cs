@@ -1,12 +1,9 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using VismaShortageManager.src.ConsoleApp.Commands;
-using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
-using Xunit;
 
 namespace VismaShortageManager.Tests.Commands
 {

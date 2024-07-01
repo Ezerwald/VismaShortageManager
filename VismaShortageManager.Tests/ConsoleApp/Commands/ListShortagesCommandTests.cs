@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Xunit;
-using Moq;
+﻿using Moq;
 using VismaShortageManager.src.ConsoleApp.Commands;
-using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;

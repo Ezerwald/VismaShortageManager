@@ -1,19 +1,14 @@
-﻿using Moq;
-using System;
-using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
-using Xunit;
 
 namespace VismaShortageManager.Tests.Helpers
 {
     public class InputParserTests
     {
-        private readonly Mock<IInputParserMethods> _inputParserMethodsMock;
         private readonly InputParser _inputParser;
 
         public InputParserTests()
         {
-            _inputParserMethodsMock = new Mock<IInputParserMethods>();
             _inputParser = new InputParser();
         }
 
@@ -21,90 +16,120 @@ namespace VismaShortageManager.Tests.Helpers
         public void ParseEnum_ShouldReturnCorrectEnum()
         {
             // Arrange
-            var expectedEnum = RoomType.Kitchen;
-            _inputParserMethodsMock.Setup(m => m.ParseEnum<RoomType>(It.IsAny<string>()))
-                .Returns(expectedEnum);
+            var input = "1\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
 
             // Act
             var result = _inputParser.ParseEnum<RoomType>("Select a room:");
 
             // Assert
-            Assert.Equal(expectedEnum, result);
+            Assert.Equal(RoomType.Kitchen, result);
         }
 
         [Fact]
         public void ParseIntInRange_ShouldReturnValidInteger()
         {
             // Arrange
-            var expectedInt = 5;
-            _inputParserMethodsMock.Setup(m => m.ParseIntInRange(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(expectedInt);
+            var input = "5\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
 
             // Act
             var result = _inputParser.ParseIntInRange("Enter a number between 1 and 10:", 1, 10);
 
             // Assert
-            Assert.Equal(expectedInt, result);
+            Assert.Equal(5, result);
         }
 
         [Fact]
         public void ParseNonEmptyString_ShouldReturnValidString()
         {
             // Arrange
-            var expectedString = "Test String";
-            _inputParserMethodsMock.Setup(m => m.ParseNonEmptyString(It.IsAny<string>()))
-                .Returns(expectedString);
+            var input = "Test String\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
 
             // Act
             var result = _inputParser.ParseNonEmptyString("Enter a non-empty string:");
 
             // Assert
-            Assert.Equal(expectedString, result);
+            Assert.Equal("Test String", result);
         }
 
         [Fact]
         public void ParseAnyString_ShouldReturnString()
         {
             // Arrange
-            var expectedString = "Any String";
-            _inputParserMethodsMock.Setup(m => m.ParseAnyString(It.IsAny<string>()))
-                .Returns(expectedString);
+            var input = "Any String\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
 
             // Act
             var result = _inputParser.ParseAnyString("Enter any string:");
 
             // Assert
-            Assert.Equal(expectedString, result);
+            Assert.Equal("Any String", result);
         }
 
         [Fact]
-        public void ParseBool_ShouldReturnBoolean()
+        public void ParseBool_ShouldReturnTrue()
         {
             // Arrange
-            var expectedBool = true;
-            _inputParserMethodsMock.Setup(m => m.ParseBool(It.IsAny<string>()))
-                .Returns(expectedBool);
+            var input = "yes\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
 
             // Act
             var result = _inputParser.ParseBool("Is it true?");
 
             // Assert
-            Assert.Equal(expectedBool, result);
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void ParseBool_ShouldReturnFalse()
+        {
+            // Arrange
+            var input = "no\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
+
+            // Act
+            var result = _inputParser.ParseBool("Is it true?");
+
+            // Assert
+            Assert.False(result);
         }
 
         [Fact]
         public void ParseDateTime_ShouldReturnDateTime()
         {
             // Arrange
-            var expectedDateTime = DateTime.Now;
-            _inputParserMethodsMock.Setup(m => m.ParseDateTime(It.IsAny<string>()))
-                .Returns(expectedDateTime);
+            var input = "2023-01-01\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
 
             // Act
             var result = _inputParser.ParseDateTime("Enter a date:");
 
             // Assert
-            Assert.Equal(expectedDateTime, result);
+            Assert.Equal(new DateTime(2023, 1, 1), result);
+        }
+
+        [Fact]
+        public void ParseDateTime_ShouldReturnNull()
+        {
+            // Arrange
+            var input = "\n";
+            var inputReader = new StringReader(input);
+            Console.SetIn(inputReader);
+
+            // Act
+            var result = _inputParser.ParseDateTime("Enter a date:");
+
+            // Assert
+            Assert.Null(result);
         }
     }
 }
