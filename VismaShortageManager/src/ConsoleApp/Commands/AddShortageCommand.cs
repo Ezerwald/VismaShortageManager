@@ -7,7 +7,7 @@ using VismaShortageManager.src.Domain.Interfaces;
 
 namespace VismaShortageManager.src.ConsoleApp.Commands
 {
-    public class AddShortageCommand
+    public class AddShortageCommand : IConsoleCommand
     {
         private readonly ShortageService _shortageService;
         private User _currentUser;

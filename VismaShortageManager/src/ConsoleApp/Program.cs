@@ -16,9 +16,7 @@ namespace VismaShortageManager
                 .AddSingleton<IShortageRepository>(new ShortageRepository("shortages.json"))
                 .AddTransient<ShortageService>()
                 .AddTransient<ConsoleApp>()
-                .AddTransient<AddShortageCommand>()
-                .AddTransient<DeleteShortageCommand>()
-                .AddTransient<ListShortagesCommand>()
+                .AddCommands()
                 .BuildServiceProvider();
 
             // Run the application

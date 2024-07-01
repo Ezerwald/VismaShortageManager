@@ -6,7 +6,7 @@ using VismaShortageManager.src.Services;
 
 namespace VismaShortageManager.src.ConsoleApp.Commands
 {
-    public class ListShortagesCommand
+    public class ListShortagesCommand : IConsoleCommand
     {
         private readonly ShortageService _shortageService;
         private readonly DeleteShortageCommand _deleteShortageCommand;
