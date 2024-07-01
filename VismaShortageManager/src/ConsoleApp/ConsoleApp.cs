@@ -35,8 +35,8 @@ namespace VismaShortageManager.src.ConsoleApp
 
         private void Login()
         {
-            var name = InputParser.ParseNonEmptyString("Enter your name:");
-            var isAdmin = InputParser.ParseBool("Are you an administrator?");
+            var name = InputParserMethods.ParseNonEmptyString("Enter your name:");
+            var isAdmin = InputParserMethods.ParseBool("Are you an administrator?");
 
             _currentUser = new User
             {

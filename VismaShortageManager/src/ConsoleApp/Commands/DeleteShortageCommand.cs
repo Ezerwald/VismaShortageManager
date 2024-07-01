@@ -1,4 +1,6 @@
-﻿using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
@@ -9,11 +11,13 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
     public class DeleteShortageCommand : IConsoleCommand
     {
         private readonly ShortageService _shortageService;
+        private readonly IInputParser _inputParser;
         private User _currentUser;
 
-        public DeleteShortageCommand(ShortageService shortageService)
+        public DeleteShortageCommand(ShortageService shortageService, IInputParser inputParser)
         {
             _shortageService = shortageService;
+            _inputParser = inputParser;
         }
 
         public void SetUser(User user)
@@ -23,7 +27,6 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
 
         public void Execute()
         {
-
             try
             {
                 var (title, room) = GetShortageDetails();
@@ -39,8 +42,8 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
 
         private (string title, string room) GetShortageDetails()
         {
-            var title = InputParser.ParseNonEmptyString("Enter title of the shortage to delete:");
-            var room = InputParser.ParseEnum<RoomType>().ToString();
+            var title = _inputParser.ParseNonEmptyString("Enter title of the shortage to delete:");
+            var room = _inputParser.ParseEnum<RoomType>().ToString();
             return (title, room);
         }
 
@@ -71,7 +74,6 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                     }
                 });
             }
-
         }
     }
 }

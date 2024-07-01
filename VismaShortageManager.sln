@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VismaShortageManager", "VismaShortageManager\VismaShortageManager.csproj", "{3499DE8F-A7D1-4F11-9B0C-193F033666E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VismaShortageManager", "VismaShortageManager\VismaShortageManager.csproj", "{3499DE8F-A7D1-4F11-9B0C-193F033666E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VismaShortageManager.Tests", "VismaShortageManager.Tests\VismaShortageManager.Tests.csproj", "{B3A0474C-A603-4DBA-8930-4FF81F75B40A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{3499DE8F-A7D1-4F11-9B0C-193F033666E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3499DE8F-A7D1-4F11-9B0C-193F033666E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3499DE8F-A7D1-4F11-9B0C-193F033666E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3A0474C-A603-4DBA-8930-4FF81F75B40A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A0474C-A603-4DBA-8930-4FF81F75B40A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A0474C-A603-4DBA-8930-4FF81F75B40A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A0474C-A603-4DBA-8930-4FF81F75B40A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

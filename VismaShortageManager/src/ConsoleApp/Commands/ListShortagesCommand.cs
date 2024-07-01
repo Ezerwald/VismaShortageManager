@@ -10,18 +10,20 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
     {
         private readonly ShortageService _shortageService;
         private readonly DeleteShortageCommand _deleteShortageCommand;
+        private readonly IInputParser _inputParser;
         private User _currentUser;
 
-        private string? _filterTitle;
-        private DateTime? _filterDateStart;
-        private DateTime? _filterDateEnd;
-        private CategoryType? _filterCategory;
-        private RoomType? _filterRoom;
+        public string? FilterTitle { get; private set; }
+        public DateTime? FilterDateStart { get; private set; }
+        public DateTime? FilterDateEnd { get; private set; }
+        public CategoryType? FilterCategory { get; private set; }
+        public RoomType? FilterRoom { get; private set; }
 
-        public ListShortagesCommand(ShortageService shortageService, DeleteShortageCommand deleteShortageCommand)
+        public ListShortagesCommand(ShortageService shortageService, DeleteShortageCommand deleteShortageCommand, IInputParser inputParser)
         {
             _shortageService = shortageService;
             _deleteShortageCommand = deleteShortageCommand;
+            _inputParser = inputParser;
         }
 
         public void SetUser(User user)
@@ -67,18 +69,18 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
             }
         }
 
-        private void ShowCurrentFilters()
+        public void ShowCurrentFilters()
         {
             Console.WriteLine("Current filters:");
-            Console.WriteLine($"Title: {_filterTitle ?? "None"}");
-            Console.WriteLine($"Date Start: {_filterDateStart?.ToString("yyyy-MM-dd") ?? "None"}");
-            Console.WriteLine($"Date End: {_filterDateEnd?.ToString("yyyy-MM-dd") ?? "None"}");
-            Console.WriteLine($"Category: {_filterCategory?.ToString() ?? "None"}");
-            Console.WriteLine($"Room: {_filterRoom?.ToString() ?? "None"}");
+            Console.WriteLine($"Title: {FilterTitle ?? "None"}");
+            Console.WriteLine($"Date Start: {FilterDateStart?.ToString("yyyy-MM-dd") ?? "None"}");
+            Console.WriteLine($"Date End: {FilterDateEnd?.ToString("yyyy-MM-dd") ?? "None"}");
+            Console.WriteLine($"Category: {FilterCategory?.ToString() ?? "None"}");
+            Console.WriteLine($"Room: {FilterRoom?.ToString() ?? "None"}");
             Console.WriteLine();
         }
 
-        private void AddFilter()
+        public void AddFilter()
         {
             MenuHelper.ShowMenu("Select filter to add:", new List<string>
             {
@@ -91,34 +93,33 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                 switch (filterChoice)
                 {
                     case 1:
-                        _filterTitle = InputParser.ParseAnyString("Enter filter title:");
+                        FilterTitle = _inputParser.ParseAnyString("Enter filter title:");
                         break;
                     case 2:
-                        _filterDateStart = InputParser.ParseDateTime("Enter start date (yyyy-mm-dd):");
-                        _filterDateEnd = InputParser.ParseDateTime("Enter end date (yyyy-mm-dd):");
+                        FilterDateStart = _inputParser.ParseDateTime("Enter start date (yyyy-mm-dd):");
+                        FilterDateEnd = _inputParser.ParseDateTime("Enter end date (yyyy-mm-dd):");
                         break;
                     case 3:
-                        _filterCategory = InputParser.ParseEnum<CategoryType>();
+                        FilterCategory = _inputParser.ParseEnum<CategoryType>();
                         break;
                     case 4:
-                        _filterRoom = InputParser.ParseEnum<RoomType>();
+                        FilterRoom = _inputParser.ParseEnum<RoomType>();
                         break;
                     default:
                         UIHelper.ShowInvalidInputResponse();
-                        break; ;
+                        break;
                 }
             });
-
         }
 
-        private void ClearFilters()
+        public void ClearFilters()
         {
             UIHelper.SeparateMessage();
-            _filterTitle = null;
-            _filterDateStart = null;
-            _filterDateEnd = null;
-            _filterCategory = null;
-            _filterRoom = null;
+            FilterTitle = null;
+            FilterDateStart = null;
+            FilterDateEnd = null;
+            FilterCategory = null;
+            FilterRoom = null;
             Console.WriteLine("Filters cleared.");
         }
 
@@ -128,11 +129,11 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
             {
                 var shortages = _shortageService.ListShortages(
                     _currentUser,
-                    _filterTitle,
-                    _filterDateStart,
-                    _filterDateEnd,
-                    _filterCategory,
-                    _filterRoom);
+                    FilterTitle,
+                    FilterDateStart,
+                    FilterDateEnd,
+                    FilterCategory,
+                    FilterRoom);
 
                 DisplayShortages(shortages);
                 ShowPostActionMenu();
@@ -168,7 +169,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                         break;
                     case 2:
                         break;
-                    case 3:
+                    default:
                         UIHelper.ShowInvalidInputResponse();
                         break;
                 }

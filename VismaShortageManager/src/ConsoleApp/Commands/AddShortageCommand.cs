@@ -1,20 +1,21 @@
-﻿using System.Windows.Input;
-using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
+using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
-using VismaShortageManager.src.Domain.Interfaces;
 
 namespace VismaShortageManager.src.ConsoleApp.Commands
 {
     public class AddShortageCommand : IConsoleCommand
     {
         private readonly ShortageService _shortageService;
+        private readonly IInputParser _inputParser;
         private User _currentUser;
 
-        public AddShortageCommand(ShortageService shortageService)
+        public AddShortageCommand(ShortageService shortageService, IInputParser inputParser)
         {
             _shortageService = shortageService;
+            _inputParser = inputParser;
         }
 
         public void SetUser(User user)
@@ -39,10 +40,10 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
 
         private Shortage CreateShortage()
         {
-            var title = InputParser.ParseNonEmptyString("Enter title:");
-            var room = InputParser.ParseEnum<RoomType>();
-            var category = InputParser.ParseEnum<CategoryType>();
-            var priority = InputParser.ParseIntInRange("Enter priority (1-10):", 1, 10);
+            var title = _inputParser.ParseNonEmptyString("Enter title:");
+            var room = _inputParser.ParseEnum<RoomType>();
+            var category = _inputParser.ParseEnum<CategoryType>();
+            var priority = _inputParser.ParseIntInRange("Enter priority (1-10):", 1, 10);
 
             return new Shortage
             {
