@@ -16,7 +16,7 @@
                 Console.WriteLine($"{i + 1}. {options[i]}");
             }
 
-            int choice = InputParser.ParseIntInRange("", 1, options.Count);
+            int choice = InputParserMethods.ParseIntInRange("", 1, options.Count);
             UIHelper.SeparateMessage();
             onSelect(choice);
         }
