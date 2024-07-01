@@ -14,7 +14,6 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
 
         public AddShortageCommand(ShortageService shortageService)
         {
-//            Console.WriteLine("AddShortageCommand constructor called");
             _shortageService = shortageService;
         }
 
