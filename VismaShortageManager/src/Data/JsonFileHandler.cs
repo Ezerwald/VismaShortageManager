@@ -11,21 +11,26 @@
         {
             if (!File.Exists(filePath))
             {
+                Console.WriteLine($"File not found: {filePath}");
                 return string.Empty;
             }
 
             try
             {
-                var jsonData = File.ReadAllText(filePath);
-                if (jsonData != null)
-                {
-                    return jsonData;
-                }
-                return string.Empty;
+                return File.ReadAllText(filePath);
+            }
+            catch (IOException ioEx)
+            {
+                Console.WriteLine($"I/O error while reading file: {ioEx.Message}");
+                throw;
+            }
+            catch (UnauthorizedAccessException uaEx)
+            {
+                Console.WriteLine($"Access error: {uaEx.Message}");
+                throw;
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error reading file: {ex.Message}");
                 throw;
             }
@@ -42,9 +47,18 @@
             {
                 File.WriteAllText(filePath, jsonData);
             }
+            catch (IOException ioEx)
+            {
+                Console.WriteLine($"I/O error while writing to file: {ioEx.Message}");
+                throw;
+            }
+            catch (UnauthorizedAccessException uaEx)
+            {
+                Console.WriteLine($"Access error: {uaEx.Message}");
+                throw;
+            }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error writing to file: {ex.Message}");
                 throw;
             }
