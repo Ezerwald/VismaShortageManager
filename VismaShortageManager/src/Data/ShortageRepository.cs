@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using System.Text.Json;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
 
@@ -18,20 +18,29 @@ namespace VismaShortageManager.src.Data
         /// Reads all shortages from the JSON file.
         /// </summary>
         /// <returns>A list of shortages.</returns>
-        public List<Shortage>? GetAllShortages()
+        public List<Shortage> GetAllShortages()
         {
             try
             {
                 var jsonData = JsonFileHandler.ReadJsonFromFile(_filePath);
-                return string.IsNullOrEmpty(jsonData) ? new List<Shortage>() : JsonSerializer.Deserialize<List<Shortage>>(jsonData, new JsonSerializerOptions
+                if (string.IsNullOrEmpty(jsonData))
+                {
+                    return new List<Shortage>();
+                }
+
+                return JsonSerializer.Deserialize<List<Shortage>>(jsonData, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                     Converters = { new JsonStringEnumConverter() }
-                });
+                }) ?? new List<Shortage>();
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON format error: {jsonEx.Message}");
+                return new List<Shortage>();
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error reading shortages from file: {ex.Message}");
                 return new List<Shortage>();
             }
@@ -54,7 +63,6 @@ namespace VismaShortageManager.src.Data
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error writing shortages to file: {ex.Message}");
             }
         }
