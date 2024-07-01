@@ -1,29 +1,51 @@
-﻿using VismaShortageManager.src.ConsoleApp.Helpers;
+﻿using System.Windows.Input;
+using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
+using VismaShortageManager.src.Domain.Interfaces;
 
 namespace VismaShortageManager.src.ConsoleApp.Commands
 {
     public class AddShortageCommand
     {
         private readonly ShortageService _shortageService;
-        private readonly User _currentUser;
+        private User _currentUser;
 
-        public AddShortageCommand(ShortageService shortageService, User currentUser)
+        public AddShortageCommand(ShortageService shortageService)
         {
+//            Console.WriteLine("AddShortageCommand constructor called");
             _shortageService = shortageService;
-            _currentUser = currentUser;
+        }
+
+        public void SetUser(User user)
+        {
+            _currentUser = user;
         }
 
         public void Execute()
+        {
+            try
+            {
+                var shortage = CreateShortage();
+                _shortageService.AddShortage(shortage);
+                UIHelper.SeparateMessage();
+                ShowPostActionMenu();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private Shortage CreateShortage()
         {
             var title = InputParser.ParseNonEmptyString("Enter title:");
             var room = InputParser.ParseEnum<RoomType>();
             var category = InputParser.ParseEnum<CategoryType>();
             var priority = InputParser.ParseIntInRange("Enter priority (1-10):", 1, 10);
 
-            var shortage = new Shortage
+            return new Shortage
             {
                 Title = title,
                 Room = room,
@@ -32,38 +54,34 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                 CreatedOn = DateTime.Now,
                 CreatedBy = _currentUser.Name
             };
-
-            _shortageService.AddShortage(shortage);
-
-            UIHelper.SeparateMessage();
-            ShowPostActionMenu();
         }
 
         private void ShowPostActionMenu()
         {
-            while (true)
-            {
-                UIHelper.ShowOptionsMenu(
-                    new List<string>
-                    {
-                        "1. Register one more shortage",
-                        "2. Back to main menu"
-                    }
-                );
+            bool shouldContinue = true;
 
-                var choice = Console.ReadLine();
-                UIHelper.SeparateMessage();
-                switch (choice)
+            while (shouldContinue)
+            {
+                MenuHelper.ShowMenu("", new List<string>
                 {
-                    case "1":
-                        Execute();
-                        return;
-                    case "2":
-                        return;
-                    default:
-                        Console.WriteLine("Invalid option, please try again.");
-                        break;
-                }
+                    "Register one more shortage",
+                    "Back to main menu"
+                }, choice =>
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            Execute();
+                            shouldContinue = false;
+                            break;
+                        case 2:
+                            shouldContinue = false;
+                            break;
+                        default:
+                            UIHelper.ShowInvalidInputResponse("Invalid option, please try again.");
+                            break;
+                    }
+                });
             }
         }
     }

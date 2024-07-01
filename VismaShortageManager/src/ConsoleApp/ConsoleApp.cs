@@ -1,18 +1,30 @@
-﻿using VismaShortageManager.src.Services;
+﻿using System;
+using System.Collections.Generic;
 using VismaShortageManager.src.ConsoleApp.Commands;
 using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Models;
+using VismaShortageManager.src.Services;
+using VismaShortageManager.src.Domain.Interfaces;
+using System.Xml.Serialization;
 
 namespace VismaShortageManager.src.ConsoleApp
 {
     public class ConsoleApp
     {
-        private readonly ShortageService _shortageService;
+        private readonly AddShortageCommand _addShortageCommand;
+        private readonly DeleteShortageCommand _deleteShortageCommand;
+        private readonly ListShortagesCommand _listShortagesCommand;
         private User _currentUser;
 
-        public ConsoleApp(ShortageService shortageService)
+        public ConsoleApp(
+            AddShortageCommand addShortageCommand,
+            DeleteShortageCommand deleteShortageCommand,
+            ListShortagesCommand listShortagesCommand
+            )
         {
-            _shortageService = shortageService;
+            _addShortageCommand = addShortageCommand;
+            _deleteShortageCommand = deleteShortageCommand;
+            _listShortagesCommand = listShortagesCommand;
         }
 
         public void Run()
@@ -31,8 +43,17 @@ namespace VismaShortageManager.src.ConsoleApp
                 Name = name,
                 IsAdministrator = isAdmin
             };
-            
+
+            SetUserToCommands(_currentUser);
+
             Console.Clear();
+        }
+
+        private void SetUserToCommands(User user)
+        {
+            _addShortageCommand.SetUser(user);
+            _deleteShortageCommand.SetUser(user);
+            _listShortagesCommand.SetUser(user);
         }
 
         private void ShowMainMenu()
@@ -41,38 +62,33 @@ namespace VismaShortageManager.src.ConsoleApp
             {
                 Console.Clear();
                 Console.WriteLine($"Username: {_currentUser.Name}   Administrator status: {_currentUser.IsAdministrator}");
-                UIHelper.ShowOptionsMenu(
-                    title: "Main Menu:",
-                    options: new List<string>
-                    {
-                        "1. Register new shortage",
-                        "2. Delete shortage",
-                        "3. List all requests",
-                        "4. Exit"
-                    }
-                );
-
-                var choice = Console.ReadLine();
-
-                switch (choice)
+                MenuHelper.ShowMenu("Main Menu:", new List<string>
                 {
-                    case "1":
-                        Console.Clear();
-                        new AddShortageCommand(_shortageService, _currentUser).Execute();
-                        break;
-                    case "2":
-                        Console.Clear();
-                        new DeleteShortageCommand(_shortageService, _currentUser).Execute();
-                        break;
-                    case "3":
-                        new ListShortagesCommand(_shortageService, _currentUser).Execute();
-                        break;
-                    case "4":
-                        return;
-                    default:
-                        UIHelper.ShowInvalidInputResponse();
-                        break;
-                }
+                    "Register new shortage",
+                    "Delete shortage",
+                    "List all requests",
+                    "Exit"
+                }, choice =>
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            Console.Clear();
+                            _addShortageCommand.Execute();
+                            break;
+                        case 2:
+                            Console.Clear();
+                            _deleteShortageCommand.Execute();
+                            break;
+                        case 3:
+                            Console.Clear();
+                            _listShortagesCommand.Execute();
+                            break;
+                        case 4:
+                            Environment.Exit(0);
+                            break;
+                    }
+                });
             }
         }
     }
