@@ -20,31 +20,51 @@ namespace VismaShortageManager.src.Services
         /// <param name="shortage">The shortage to add.</param>
         public void AddShortage(Shortage shortage)
         {
-            var shortages = _repository.GetAllShortages();
-            var existingShortage = shortages.FirstOrDefault(s => s.Title == shortage.Title && s.Room == shortage.Room);
-
-            if (existingShortage != null)
+            try
             {
-                if (shortage.Priority > existingShortage.Priority)
+                var shortages = _repository.GetAllShortages();
+                var existingShortage = GetExistingShortage(shortage, shortages);
+
+                if (existingShortage != null)
                 {
-                    // Override the existing shortage with the new one if priority is higher
-                    shortages.Remove(existingShortage);
-                    shortages.Add(shortage);
-                    _repository.SaveShortages(shortages);
-                    UIHelper.ShowSuccessMessage("Shortage updated due to higher priority.");
+                    HandleExistingShortage(shortage, existingShortage, shortages);
                 }
                 else
                 {
-                    UIHelper.ShowInfoMessage("Shortage already exists with equal or higher priority.");
+                    AddNewShortage(shortage, shortages);
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while adding the shortage: {ex.Message}");
+            }
+        }
+
+        private Shortage? GetExistingShortage(Shortage shortage, List<Shortage> shortages)
+        {
+            return shortages.FirstOrDefault(s => s.Title == shortage.Title && s.Room == shortage.Room);
+        }
+
+        private void HandleExistingShortage(Shortage shortage, Shortage existingShortage, List<Shortage> shortages)
+        {
+            if (shortage.Priority > existingShortage.Priority)
+            {
+                shortages.Remove(existingShortage);
+                shortages.Add(shortage);
+                _repository.SaveShortages(shortages);
+                UIHelper.ShowSuccessMessage("Shortage updated due to higher priority.");
             }
             else
             {
-                // Add new shortage
-                shortages.Add(shortage);
-                _repository.SaveShortages(shortages);
-                UIHelper.ShowSuccessMessage("Shortage added successfully.");
+                UIHelper.ShowInfoMessage("Shortage already exists with equal or higher priority.");
             }
+        }
+
+        private void AddNewShortage(Shortage shortage, List<Shortage> shortages)
+        {
+            shortages.Add(shortage);
+            _repository.SaveShortages(shortages);
+            UIHelper.ShowSuccessMessage("Shortage added successfully.");
         }
 
         /// <summary>
@@ -55,25 +75,37 @@ namespace VismaShortageManager.src.Services
         /// <param name="user">The user attempting to delete the shortage.</param>
         public void DeleteShortage(string title, string room, User user)
         {
-            var shortages = _repository.GetAllShortages();
-            var shortage = shortages.FirstOrDefault(s => s.Title == title && s.Room.ToString() == room);
+            try
+            {
+                var shortages = _repository.GetAllShortages();
+                var shortage = shortages.FirstOrDefault(s => s.Title == title && s.Room.ToString() == room);
 
-            if (shortage == null)
-            {
-                UIHelper.ShowInfoMessage("Shortage not found.");
-                return;
-            }
+                if (shortage == null)
+                {
+                    UIHelper.ShowInfoMessage("Shortage not found.");
+                    return;
+                }
 
-            if (shortage.CreatedBy == user.Name || user.IsAdministrator)
-            {
-                shortages.Remove(shortage);
-                _repository.SaveShortages(shortages);
-                UIHelper.ShowSuccessMessage("Shortage deleted successfully.");
+                if (IsUserAuthorizedToDelete(shortage, user))
+                {
+                    shortages.Remove(shortage);
+                    _repository.SaveShortages(shortages);
+                    UIHelper.ShowSuccessMessage("Shortage deleted successfully.");
+                }
+                else
+                {
+                    UIHelper.ShowWarningMessage("You do not have permission to delete this shortage.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                UIHelper.ShowWarningMessage("You do not have permission to delete this shortage.");
+                Console.WriteLine($"An error occurred while deleting the shortage: {ex.Message}");
             }
+        }
+
+        private bool IsUserAuthorizedToDelete(Shortage shortage, User user)
+        {
+            return shortage.CreatedBy == user.Name || user.IsAdministrator;
         }
 
         /// <summary>
@@ -88,39 +120,52 @@ namespace VismaShortageManager.src.Services
         /// <returns>A list of shortages matching the filters.</returns>
         public List<Shortage> ListShortages(User user, string? filterTitle = null, DateTime? filterDateStart = null, DateTime? filterDateEnd = null, CategoryType? filterCategory = null, RoomType? filterRoom = null)
         {
-            var shortages = _repository.GetAllShortages();
+            try
+            {
+                var shortages = _repository.GetAllShortages();
+                shortages = FilterShortagesByUser(shortages, user);
 
+                if (!string.IsNullOrEmpty(filterTitle))
+                {
+                    shortages = shortages.Where(s => s.Title.Contains(filterTitle, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                if (filterDateStart.HasValue)
+                {
+                    shortages = shortages.Where(s => s.CreatedOn >= filterDateStart.Value).ToList();
+                }
+
+                if (filterDateEnd.HasValue)
+                {
+                    shortages = shortages.Where(s => s.CreatedOn <= filterDateEnd.Value).ToList();
+                }
+
+                if (filterCategory.HasValue)
+                {
+                    shortages = shortages.Where(s => s.Category == filterCategory.Value).ToList();
+                }
+
+                if (filterRoom.HasValue)
+                {
+                    shortages = shortages.Where(s => s.Room == filterRoom.Value).ToList();
+                }
+
+                return shortages.OrderByDescending(s => s.Priority).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while listing the shortages: {ex.Message}");
+                return new List<Shortage>();
+            }
+        }
+
+        private List<Shortage> FilterShortagesByUser(List<Shortage> shortages, User user)
+        {
             if (!user.IsAdministrator)
             {
                 shortages = shortages.Where(s => s.CreatedBy == user.Name).ToList();
             }
-
-            if (!string.IsNullOrEmpty(filterTitle))
-            {
-                shortages = shortages.Where(s => s.Title.Contains(filterTitle, StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-
-            if (filterDateStart.HasValue)
-            {
-                shortages = shortages.Where(s => s.CreatedOn >= filterDateStart.Value).ToList();
-            }
-
-            if (filterDateEnd.HasValue)
-            {
-                shortages = shortages.Where(s => s.CreatedOn <= filterDateEnd.Value).ToList();
-            }
-
-            if (filterCategory.HasValue)
-            {
-                shortages = shortages.Where(s => s.Category == filterCategory.Value).ToList();
-            }
-
-            if (filterRoom.HasValue)
-            {
-                shortages = shortages.Where(s => s.Room == filterRoom.Value).ToList();
-            }
-
-            return shortages.OrderByDescending(s => s.Priority).ToList();
+            return shortages;
         }
     }
 }
