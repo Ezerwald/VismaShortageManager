@@ -1,10 +1,11 @@
 # VismaShortageManager
-## Disclaimer
-This project is not affiliated with any company and any product. It is a test task created by a student.
 
 ## Overview
 
 VismaShortageManager is a console application designed to help manage and track shortages in various categories and rooms. It provides functionality to add, list, and delete shortages, as well as apply filters to view specific subsets of shortages. The application utilizes dependency injection via `Microsoft.Extensions.DependencyInjection` for better modularity and testability. Comprehensive unit tests are provided to ensure the reliability of the application.
+
+## Disclaimer
+This project is not affiliated with any company and any product. It is a test task created by a student.
 
 ## Features
 
