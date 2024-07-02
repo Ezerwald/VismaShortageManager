@@ -46,7 +46,7 @@ namespace VismaShortageManager.Tests.Helpers
             var result = _inputParser.ParseEnum<RoomType>("Select a room:");
 
             // Assert
-            Assert.Equal(RoomType.Kitchen, result);
+            Assert.Equal(RoomType.MeetingRoom, result);
         }
 
         [Fact]

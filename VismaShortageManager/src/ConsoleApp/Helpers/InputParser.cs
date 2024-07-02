@@ -4,103 +4,105 @@ namespace VismaShortageManager.src.ConsoleApp.Helpers
 {
     public class InputParser : IInputParser
     {
-        public T ParseEnum<T>(string prompt = null) where T : struct, Enum
+        public T ParseEnum<T>(string? prompt = null) where T : struct, Enum
         {
-            return PromptLoop(prompt, TryParseEnum<T>);
+            while (true)
+            {
+                if (!string.IsNullOrEmpty(prompt))
+                {
+                    Console.WriteLine(prompt);
+                }
+                Console.WriteLine($"Select {typeof(T).Name}:");
+
+                var enumValues = Enum.GetValues(typeof(T));
+                for (int i = 0; i < enumValues.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {enumValues.GetValue(i)}");
+                }
+
+                if (int.TryParse(Console.ReadLine().Trim(), out int selectedIndex) &&
+                    selectedIndex >= 1 && selectedIndex <= enumValues.Length)
+                {
+                    return (T)enumValues.GetValue(selectedIndex - 1);
+                }
+
+                Console.WriteLine("Invalid selection. Please try again.");
+            }
         }
 
         public int ParseIntInRange(string prompt, int min, int max)
         {
-            return PromptLoop(prompt, input => TryParseIntInRange(input, min, max));
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                if (int.TryParse(Console.ReadLine().Trim(), out int value) && value >= min && value <= max)
+                {
+                    return value;
+                }
+
+                Console.WriteLine($"Invalid input. Please enter a number between {min} and {max}.");
+            }
         }
 
         public string ParseNonEmptyString(string prompt)
         {
-            return PromptLoop(prompt, TryParseNonEmptyString);
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                var input = Console.ReadLine().Trim();
+                if (!string.IsNullOrWhiteSpace(input))
+                {
+                    return input;
+                }
+
+                Console.WriteLine("Input cannot be empty. Please try again.");
+            }
         }
 
         public string ParseAnyString(string prompt)
         {
             Console.WriteLine(prompt);
-            return Console.ReadLine();
+            return Console.ReadLine().Trim();
         }
 
         public bool ParseBool(string prompt)
         {
-            return PromptLoop(prompt, TryParseBool);
+            while (true)
+            {
+                Console.WriteLine(prompt + " (yes/no)");
+                var input = Console.ReadLine().Trim().ToLower();
+                if (input == "yes" || input == "true" || input == "y")
+                {
+                    return true;
+                }
+                if (input == "no" || input == "false" || input == "n")
+                {
+                    return false;
+                }
+
+                Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
+            }
         }
 
         public DateTime? ParseDateTime(string prompt)
         {
-            return PromptLoop(prompt, TryParseDateTime);
-        }
-
-        private T PromptLoop<T>(string prompt, Func<string, (bool isValid, T result)> tryParse)
-        {
             while (true)
             {
                 Console.WriteLine(prompt);
-                var input = Console.ReadLine();
-                var (isValid, result) = tryParse(input);
-                if (isValid) return result;
+                var input = Console.ReadLine().Trim();
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    return null;
+                }
 
-                Console.WriteLine("Invalid input. Please try again.");
-            }
-        }
+                if (DateTime.TryParse(input, out var dateTime))
+                {
+                    return dateTime;
+                }
 
-        private (bool isValid, T result) TryParseEnum<T>(string input) where T : struct, Enum
-        {
-            if (Enum.TryParse<T>(input, out var result) && Enum.IsDefined(typeof(T), result))
-            {
-                return (true, result);
+                Console.WriteLine("Invalid date format. Please enter the date in the format yyyy-mm-dd.");
             }
-            return (false, default);
-        }
-
-        private (bool isValid, int result) TryParseIntInRange(string input, int min, int max)
-        {
-            if (int.TryParse(input, out int value) && value >= min && value <= max)
-            {
-                return (true, value);
-            }
-            return (false, default);
-        }
-
-        private (bool isValid, string result) TryParseNonEmptyString(string input)
-        {
-            if (!string.IsNullOrWhiteSpace(input))
-            {
-                return (true, input);
-            }
-            return (false, default);
-        }
-
-        private (bool isValid, bool result) TryParseBool(string input)
-        {
-            var loweredInput = input.ToLower();
-            if (loweredInput == "yes" || loweredInput == "true" || loweredInput == "y")
-            {
-                return (true, true);
-            }
-            else if (loweredInput == "no" || loweredInput == "false" || loweredInput == "n")
-            {
-                return (true, false);
-            }
-            return (false, default);
-        }
-
-        private (bool isValid, DateTime? result) TryParseDateTime(string input)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return (true, null);
-            }
-
-            if (DateTime.TryParse(input, out var dateTime))
-            {
-                return (true, dateTime);
-            }
-            return (false, default);
         }
     }
 }
+

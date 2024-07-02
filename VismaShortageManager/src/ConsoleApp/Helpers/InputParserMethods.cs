@@ -5,7 +5,7 @@ namespace VismaShortageManager.src.ConsoleApp.Helpers
     public static class InputParserMethods
     {
 
-        static readonly IInputParser InputParser = new InputParser();
+        static readonly InputParser InputParser = new();
 
         /// <summary>
         /// Prompts the user for a valid enum value by presenting a numbered list of options.

@@ -31,36 +31,22 @@ namespace VismaShortageManager.Tests.Commands
         [Fact]
         public void AddFilter_ShouldAddTitleFilter()
         {
-            _inputParserMock.Setup(x => x.ParseAnyString(It.IsAny<string>())).Returns("Test Title");
+            // Arrange
+            var input = "Test Title";
 
-            _listShortagesCommand.AddFilter();
+            _inputParserMock.Setup(x => x.ParseAnyString(It.IsAny<string>())).Returns(input);
 
-            Assert.Equal("Test Title", _listShortagesCommand.FilterTitle);
-        }
+            // Act
+            _listShortagesCommand.AddFilterMenuOnSelect(1);
 
-        [Fact]
-        public void AddFilter_ShouldAddCategoryFilter()
-        {
-            _inputParserMock.Setup(x => x.ParseEnum<CategoryType>(It.IsAny<string>())).Returns(CategoryType.Food);
-
-            _listShortagesCommand.AddFilter();
-
-            Assert.Equal(CategoryType.Food, _listShortagesCommand.FilterCategory);
-        }
-
-        [Fact]
-        public void AddFilter_ShouldAddRoomFilter()
-        {
-            _inputParserMock.Setup(x => x.ParseEnum<RoomType>(It.IsAny<string>())).Returns(RoomType.Kitchen);
-
-            _listShortagesCommand.AddFilter();
-
-            Assert.Equal(RoomType.Kitchen, _listShortagesCommand.FilterRoom);
+            // Assert
+            Assert.Equal(input, _listShortagesCommand.FilterTitle);
         }
 
         [Fact]
         public void AddFilter_ShouldAddDateRangeFilter()
         {
+            // Arrange
             var startDate = new DateTime(2005, 11, 16);
             var endDate = new DateTime(2006, 11, 23);
 
@@ -68,16 +54,48 @@ namespace VismaShortageManager.Tests.Commands
                 .Returns(startDate)
                 .Returns(endDate);
 
-            _listShortagesCommand.AddFilter();
+            // Act
+            _listShortagesCommand.AddFilterMenuOnSelect(2);
 
+            // Assert
             Assert.Equal(startDate, _listShortagesCommand.FilterDateStart);
             Assert.Equal(endDate, _listShortagesCommand.FilterDateEnd);
         }
 
         [Fact]
-        public void ClearFilters_ShouldClearAllFilters()
+        public void AddFilter_ShouldAddCategoryFilter()
         {
-            _listShortagesCommand.AddFilter();
+            // Arrange
+            var input = CategoryType.Food;
+
+            _inputParserMock.Setup(x => x.ParseEnum<CategoryType>(It.IsAny<string>())).Returns(input);
+
+            // Act
+            _listShortagesCommand.AddFilterMenuOnSelect(3);
+
+            // Assert
+            Assert.Equal(input, _listShortagesCommand.FilterCategory);
+        }
+
+        [Fact]
+        public void AddFilter_ShouldAddRoomFilter()
+        {
+            // Arrange
+            var input = RoomType.Kitchen;
+
+            _inputParserMock.Setup(x => x.ParseEnum<RoomType>(It.IsAny<string>())).Returns(input);
+
+            // Act
+            _listShortagesCommand.AddFilterMenuOnSelect(4);
+
+            // Assert
+            Assert.Equal(input, _listShortagesCommand.FilterRoom);
+        }
+
+        [Fact]
+        public void ClearFilters_ShouldClearAllFilters()
+        {   
+            // Arrange
             _listShortagesCommand.ClearFilters();
 
             Assert.Null(_listShortagesCommand.FilterTitle);

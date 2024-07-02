@@ -79,7 +79,6 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                 var (title, room) = GetShortageDetails();
                 _shortageService.DeleteShortage(title, room, _currentUser);
                 UIHelper.SeparateMessage();
-                ShowPostActionMenu();
             }
             catch (Exception ex)
             {

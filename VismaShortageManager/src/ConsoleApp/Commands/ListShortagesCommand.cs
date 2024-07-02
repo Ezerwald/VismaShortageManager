@@ -80,7 +80,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
             Console.WriteLine();
         }
 
-        public void AddFilter()
+        private void AddFilter()
         {
             MenuHelper.ShowMenu("Select filter to add:", new List<string>
             {
@@ -90,26 +90,31 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                 "Room"
             }, filterChoice =>
             {
-                switch (filterChoice)
-                {
-                    case 1:
-                        FilterTitle = _inputParser.ParseAnyString("Enter filter title:");
-                        break;
-                    case 2:
-                        FilterDateStart = _inputParser.ParseDateTime("Enter start date (yyyy-mm-dd):");
-                        FilterDateEnd = _inputParser.ParseDateTime("Enter end date (yyyy-mm-dd):");
-                        break;
-                    case 3:
-                        FilterCategory = _inputParser.ParseEnum<CategoryType>();
-                        break;
-                    case 4:
-                        FilterRoom = _inputParser.ParseEnum<RoomType>();
-                        break;
-                    default:
-                        UIHelper.ShowInvalidInputResponse();
-                        break;
-                }
+                AddFilterMenuOnSelect(filterChoice);
             });
+        }
+
+        public void AddFilterMenuOnSelect(int filterChoice)
+        {
+            switch (filterChoice)
+            {
+                case 1:
+                    FilterTitle = _inputParser.ParseAnyString("Enter filter title:");
+                    break;
+                case 2:
+                    FilterDateStart = _inputParser.ParseDateTime("Enter start date (yyyy-mm-dd):");
+                    FilterDateEnd = _inputParser.ParseDateTime("Enter end date (yyyy-mm-dd):");
+                    break;
+                case 3:
+                    FilterCategory = _inputParser.ParseEnum<CategoryType>();
+                    break;
+                case 4:
+                    FilterRoom = _inputParser.ParseEnum<RoomType>();
+                    break;
+                default:
+                    UIHelper.ShowInvalidInputResponse();
+                    break;
+            }
         }
 
         public void ClearFilters()
@@ -162,18 +167,24 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                 "Back to filter menu",
             }, choice =>
             {
-                switch (choice)
-                {
-                    case 1:
-                        _deleteShortageCommand.Execute();
-                        break;
-                    case 2:
-                        break;
-                    default:
-                        UIHelper.ShowInvalidInputResponse();
-                        break;
-                }
+                PostActionMenuOnSelect(choice);
             });
         }
+
+        private void PostActionMenuOnSelect(int choice)
+        {
+            switch (choice)
+            {
+                case 1:
+                    _deleteShortageCommand.Execute();
+                    break;
+                case 2:
+                    break;
+                default:
+                    UIHelper.ShowInvalidInputResponse();
+                    break;
+            }
+        }
+
     }
 }
