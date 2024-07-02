@@ -21,7 +21,7 @@ VismaShortageManager is a console application designed to help manage and track 
 Utilized to encapsulate actions as objects implementing `IConsoleCommand`. This pattern separates requesters from executors, enhancing flexibility.
 
 - **Repository Pattern**:
-Abstracts data access operations via `IShortageRepository`, isolating business logic from data storage. Enhances maintainability and scalability.
+Abstracts data access operations through `IShortageRepository`, separating business logic from data storage processes managed by `JsonFileHandler.cs`. Enhances maintainability and scalability by providing a clear abstraction layer for interacting with data storage.
 
 ## Dependency Injection
 
@@ -104,5 +104,5 @@ public class DeleteShortageCommandTests
 
 ## Summary
 
-This project is designed to manage shortages within a system using C# and .NET technologies. It utilizes the Command and Repository patterns to maintain separation of concerns and facilitate extensibility. The Command pattern encapsulates actions as objects through IConsoleCommand, allowing flexible command execution. The Repository pattern abstracts data access via IShortageRepository, ensuring clear separation between business logic and data storage. Dependency injection using Microsoft.Extensions.DependencyInjection enhances modularity and testability. Unit testing with xUnit and Moq validates functionality and ensures reliability. This project serves as a demonstration of structured software design and effective testing practices.
+This project is designed to manage shortages within a system using C# and .NET technologies. It utilizes the Command and Repository patterns to maintain separation of concerns and facilitate extensibility. The Command pattern encapsulates actions as objects through IConsoleCommand, allowing flexible command execution. The Repository pattern abstracts data access via IShortageRepository, ensuring clear separation between business logic and data storage. Dependency injection using Microsoft.Extensions.DependencyInjection enhances modularity and testability. Unit testing with xUnit and Moq validates functionality and ensures reliability.
 
