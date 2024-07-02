@@ -35,7 +35,7 @@ var serviceProvider = new ServiceCollection()
     .AddTransient<AddShortageCommand>()
     .AddTransient<DeleteShortageCommand>()
     .BuildServiceProvider();
-```csharp
+```
 
 ## Unit Testing
 
@@ -70,8 +70,7 @@ public class DeleteShortageCommandTests
 }
 
 // Other test classes...
-
-```csharp
+```
 
 ## Disclaimer
 
