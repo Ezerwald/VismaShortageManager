@@ -39,7 +39,7 @@ var serviceProvider = new ServiceCollection()
 
 ## Unit Testing
 
-The project includes comprehensive unit tests to ensure the functionality and reliability of the application. The tests cover various components, including commands, services, and helpers. Tests are organized in the `MyApp.Test` project, which mirrors the structure of the main project.
+The project includes comprehensive unit tests to ensure the functionality and reliability of the application. The tests cover various components, including commands, services, and helpers. Tests are organized in the `VismaShortageManager.Test` project, which mirrors the structure of the main project.
 
 ### Test Collections
 
