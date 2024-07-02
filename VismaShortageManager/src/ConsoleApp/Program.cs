@@ -15,9 +15,9 @@ namespace VismaShortageManager
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<IShortageRepository>(new ShortageRepository("shortages.json"))
                 .AddTransient<IShortageService, ShortageService>()
-                .AddTransient<IInputParser, InputParser>() // Register IInputParser
+                .AddTransient<IInputParser, InputParser>()
                 .AddCommands() // Register all commands dynamically
-                .AddTransient<ConsoleApp>() // Ensure ConsoleApp is registered
+                .AddTransient<ConsoleApp>()
                 .BuildServiceProvider();
 
             // Run the application

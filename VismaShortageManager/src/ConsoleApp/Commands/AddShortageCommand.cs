@@ -2,7 +2,6 @@
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
-using VismaShortageManager.src.Services;
 
 namespace VismaShortageManager.src.ConsoleApp.Commands
 {
