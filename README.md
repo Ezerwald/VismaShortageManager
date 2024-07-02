@@ -1,4 +1,6 @@
 # VismaShortageManager
+## Disclaimer
+This project is not affiliated with any company and any product. It is a test task created by a student.
 
 ## Overview
 
@@ -10,14 +12,23 @@ VismaShortageManager is a console application designed to help manage and track 
 - **List Shortages**: View a list of all shortages with options to filter by title, date range, category, and room.
 - **Delete Shortages**: Remove shortages from the list.
 - **Filter Shortages**: Apply multiple filters to narrow down the list of shortages.
-- **User Management**: Set the current user for actions such as adding or deleting shortages.
+- **User Management**: Set the current user specifying permission level for actions such as adding or deleting shortages.
+
+## Programming Patterns Used
+
+- **Command Pattern**:
+Utilized to encapsulate actions as objects implementing `IConsoleCommand`. This pattern separates requesters from executors, enhancing flexibility.
+
+- **Repository Pattern**:
+Abstracts data access operations via `IShortageRepository`, isolating business logic from data storage. Enhances maintainability and scalability.
 
 ## Dependency Injection
 
 This project uses `Microsoft.Extensions.DependencyInjection` for managing dependencies. This allows for better separation of concerns and easier unit testing. The following services and commands are registered:
 
 - **Services**:
-  - `IShortageService`
+  - `ShortageRepository`
+  - `ShortageService`
   - `InputParser`
 
 - **Commands**:
@@ -29,17 +40,35 @@ Dependency injection is set up in the `Program.cs` file:
 
 ```csharp
 var serviceProvider = new ServiceCollection()
-    .AddSingleton<IShortageService, ShortageService>()
-    .AddSingleton<IInputParser, InputParser>()
-    .AddTransient<ListShortagesCommand>()
-    .AddTransient<AddShortageCommand>()
-    .AddTransient<DeleteShortageCommand>()
+    .AddSingleton<IShortageRepository>(new ShortageRepository("shortages.json"))
+    .AddTransient<IShortageService, ShortageService>()
+    .AddTransient<IInputParser, InputParser>()
+    .AddCommands() // Register all commands dynamically
+    .AddTransient<ConsoleApp>()
     .BuildServiceProvider();
+```
+
+In the `ServiceCollectionExtensions.cs` file, the `AddCommands` method is implemented to register all classes that implement the `IConsoleCommand` interface:
+
+```csharp
+public static IServiceCollection AddCommands(this IServiceCollection services)
+{
+    var commandTypes = typeof(Program).Assembly.GetTypes()
+        .Where(t => typeof(IConsoleCommand).IsAssignableFrom(t) && !t.IsInterface);
+
+    foreach (var commandType in commandTypes)
+    {
+        services.AddTransient(commandType);
+    }
+
+    return services;
+}
 ```
 
 ## Unit Testing
 
 The project includes comprehensive unit tests to ensure the functionality and reliability of the application. The tests cover various components, including commands, services, and helpers. Tests are organized in the `VismaShortageManager.Test` project, which mirrors the structure of the main project.
+To facilitate testing, the project makes extensive use of the Moq framework to create mocks for dependencies. This allows for isolation of the units under test, ensuring that the tests are focused on the functionality of the specific components without interference from external dependencies.
 
 ### Test Collections
 
@@ -71,8 +100,4 @@ public class DeleteShortageCommandTests
 
 // Other test classes...
 ```
-
-## Disclaimer
-
-This project is not affiliated with any company and any product. It is a test task created by a student.
 
