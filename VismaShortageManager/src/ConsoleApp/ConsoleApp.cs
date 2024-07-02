@@ -61,7 +61,7 @@ namespace VismaShortageManager.src.ConsoleApp
                 {
                     "Register new shortage",
                     "Delete shortage",
-                    "List all requests",
+                    "List all shortages",
                     "Exit"
                 }, choice =>
                 {
