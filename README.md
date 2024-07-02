@@ -13,7 +13,11 @@ VismaShortageManager is a console application designed to help manage and track 
 - **List Shortages**: View a list of all shortages with options to filter by title, date range, category, and room.
 - **Delete Shortages**: Remove shortages from the list.
 - **Filter Shortages**: Apply multiple filters to narrow down the list of shortages.
-- **User Management**: Set the current user specifying permission level for actions such as adding or deleting shortages.
+- **User Management**: Set the current user for actions such as adding or deleting shortages.
+
+### User permission levels:
+- **Administrators**: Can see and delete all requests.
+- **Other users**: Can see and delete only their own requests.  
 
 ## Programming Patterns Used
 
