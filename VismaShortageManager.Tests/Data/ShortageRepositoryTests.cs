@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace VismaShortageManager.Tests.Data
 {
+    [Collection("DataTests")]
     public class ShortageRepositoryTests
     {
         private readonly string _filePath = "shortages_test.json";

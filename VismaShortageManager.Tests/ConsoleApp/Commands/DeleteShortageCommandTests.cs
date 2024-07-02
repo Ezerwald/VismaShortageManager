@@ -11,6 +11,7 @@ using Xunit;
 
 namespace VismaShortageManager.Tests.Commands
 {
+    [Collection("DeleteShortageCommandTests")]
     public class DeleteShortageCommandTests : IDisposable
     {
         private readonly Mock<IShortageRepository> _shortageRepositoryMock;

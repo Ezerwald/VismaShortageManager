@@ -10,6 +10,7 @@ using Xunit;
 
 namespace VismaShortageManager.Tests.Commands
 {
+    [Collection("AddShortageCommandTests")]
     public class AddShortageCommandTests : IDisposable
     {
         private readonly Mock<IShortageRepository> _shortageRepositoryMock;

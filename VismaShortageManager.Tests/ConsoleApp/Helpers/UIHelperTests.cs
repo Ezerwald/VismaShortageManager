@@ -1,7 +1,8 @@
 ﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 
-namespace VismaShortageManager.Tests.ConsoleApp.Helpers
+namespace VismaShortageManager.Tests.Helpers
 {
+    [Collection("UIHelperTests")]
     public class UIHelperTests : IDisposable
     {
         private StringWriter _consoleOutput;

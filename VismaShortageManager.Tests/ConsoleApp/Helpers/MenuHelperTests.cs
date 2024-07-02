@@ -2,6 +2,7 @@
 
 namespace VismaShortageManager.Tests.Helpers
 {
+    [Collection("MenuHelperTests")]
     public class MenuHelperTests : IDisposable
     {
         private StringWriter _consoleOutput;

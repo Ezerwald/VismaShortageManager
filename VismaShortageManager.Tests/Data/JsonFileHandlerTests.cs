@@ -2,6 +2,7 @@
 
 namespace VismaShortageManager.Tests.Data
 {
+    [Collection("DataTests")]
     public class JsonFileHandlerTests
     {
         [Fact]

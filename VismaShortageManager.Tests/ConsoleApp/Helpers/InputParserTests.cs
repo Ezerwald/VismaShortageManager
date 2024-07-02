@@ -6,6 +6,7 @@ using Xunit;
 
 namespace VismaShortageManager.Tests.Helpers
 {
+    [Collection("InputParserTests")]
     public class InputParserTests : IDisposable
     {
         private readonly InputParser _inputParser;

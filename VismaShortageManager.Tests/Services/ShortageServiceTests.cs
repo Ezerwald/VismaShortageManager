@@ -6,6 +6,7 @@ using VismaShortageManager.src.Domain.Enums;
 
 namespace VismaShortageManager.Tests.Services
 {
+    [Collection("ServicesTests")]
     public class ShortageServiceTests
     {
         private readonly Mock<IShortageRepository> _repositoryMock;
