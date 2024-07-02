@@ -8,7 +8,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
 {
     public class ListShortagesCommand : IConsoleCommand
     {
-        private readonly ShortageService _shortageService;
+        private readonly IShortageService _shortageService;
         private readonly DeleteShortageCommand _deleteShortageCommand;
         private readonly IInputParser _inputParser;
         private User _currentUser;
@@ -19,7 +19,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
         public CategoryType? FilterCategory { get; private set; }
         public RoomType? FilterRoom { get; private set; }
 
-        public ListShortagesCommand(ShortageService shortageService, DeleteShortageCommand deleteShortageCommand, IInputParser inputParser)
+        public ListShortagesCommand(IShortageService shortageService, DeleteShortageCommand deleteShortageCommand, IInputParser inputParser)
         {
             _shortageService = shortageService;
             _deleteShortageCommand = deleteShortageCommand;

@@ -14,7 +14,7 @@ namespace VismaShortageManager
             // Setup Dependency Injection
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<IShortageRepository>(new ShortageRepository("shortages.json"))
-                .AddTransient<ShortageService>()
+                .AddTransient<IShortageService, ShortageService>()
                 .AddTransient<IInputParser, InputParser>() // Register IInputParser
                 .AddCommands() // Register all commands dynamically
                 .AddTransient<ConsoleApp>() // Ensure ConsoleApp is registered

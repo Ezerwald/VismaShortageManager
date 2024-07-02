@@ -8,11 +8,11 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
 {
     public class AddShortageCommand : IConsoleCommand
     {
-        private readonly ShortageService _shortageService;
+        private readonly IShortageService _shortageService;
         private readonly IInputParser _inputParser;
         private User _currentUser;
 
-        public AddShortageCommand(ShortageService shortageService, IInputParser inputParser)
+        public AddShortageCommand(IShortageService shortageService, IInputParser inputParser)
         {
             _shortageService = shortageService;
             _inputParser = inputParser;
@@ -71,8 +71,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                     switch (choice)
                     {
                         case 1:
-                            Execute();
-                            shouldContinue = false;
+                            RegisterOneMoreShortage();
                             break;
                         case 2:
                             shouldContinue = false;
@@ -82,6 +81,18 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                             break;
                     }
                 });
+            }
+        }
+        private void RegisterOneMoreShortage()
+        {
+            try
+            {
+                var shortage = CreateShortage();
+                _shortageService.AddShortage(shortage);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
     }

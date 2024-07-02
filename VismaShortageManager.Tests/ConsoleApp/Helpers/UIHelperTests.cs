@@ -1,85 +1,115 @@
 ﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 
-namespace VismaShortageManager.Tests.Helpers
+namespace VismaShortageManager.Tests.ConsoleApp.Helpers
 {
-    public class UIHelperTests
+    public class UIHelperTests : IDisposable
     {
+        private StringWriter _consoleOutput;
+        private StringReader _consoleInput;
+
+        public UIHelperTests()
+        {
+            ResetConsole();
+        }
+
+        public void Dispose()
+        {
+            ResetConsole();
+        }
+
+        private void ResetConsole()
+        {
+            _consoleOutput?.Dispose();
+            _consoleInput?.Dispose();
+
+            _consoleOutput = new StringWriter();
+            _consoleInput = new StringReader(string.Empty);
+
+            Console.SetOut(_consoleOutput);
+            Console.SetIn(_consoleInput);
+        }
+
         [Fact]
         public void SeparateMessage_ShouldDisplaySeparatorLine()
         {
             // Arrange
-            var output = new StringWriter();
-            Console.SetOut(output);
+            ResetConsole();
 
             // Act
             UIHelper.SeparateMessage('*', 10);
 
             // Assert
-            var expectedOutput = "**********\n";
-            Assert.Equal(expectedOutput, output.ToString());
+            var expectedOutput = "**********\r\n";
+            Assert.Equal(expectedOutput, _consoleOutput.ToString());
         }
 
         [Fact]
         public void ShowInvalidInputResponse_ShouldDisplayWarningMessageAndWaitForKeyPress()
         {
             // Arrange
-            var input = "a\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
-            var output = new StringWriter();
-            Console.SetOut(output);
+            var expectedOutput = "Invalid option, please try again";
+
+            // Set input and output
+            _consoleInput = new StringReader("a\n");
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             UIHelper.ShowInvalidInputResponse();
 
             // Assert
-            var expectedOutput = "Invalid option, please try again\n";
-            Assert.Contains(expectedOutput, output.ToString());
+            var actualOutput = RemoveConsoleColorCodes(_consoleOutput.ToString());
+            Assert.Contains(expectedOutput, actualOutput);
         }
+
 
         [Fact]
         public void ShowSuccessMessage_ShouldDisplaySuccessMessageInGreen()
         {
             // Arrange
-            var output = new StringWriter();
-            Console.SetOut(output);
+            ResetConsole();
 
             // Act
             UIHelper.ShowSuccessMessage("Success");
 
             // Assert
-            var expectedOutput = "Success\n";
-            Assert.Contains(expectedOutput, output.ToString());
+            var expectedOutput = "Success";
+            Assert.Contains(expectedOutput, RemoveConsoleColorCodes(_consoleOutput.ToString()));
         }
 
         [Fact]
         public void ShowWarningMessage_ShouldDisplayWarningMessageInRed()
         {
             // Arrange
-            var output = new StringWriter();
-            Console.SetOut(output);
+            ResetConsole();
 
             // Act
             UIHelper.ShowWarningMessage("Warning");
 
             // Assert
-            var expectedOutput = "Warning\n";
-            Assert.Contains(expectedOutput, output.ToString());
+            var expectedOutput = "Warning";
+            Assert.Contains(expectedOutput, RemoveConsoleColorCodes(_consoleOutput.ToString()));
         }
 
         [Fact]
         public void ShowInfoMessage_ShouldDisplayInfoMessageInYellow()
         {
             // Arrange
-            var output = new StringWriter();
-            Console.SetOut(output);
+            ResetConsole();
 
             // Act
             UIHelper.ShowInfoMessage("Info");
 
             // Assert
-            var expectedOutput = "Info\n";
-            Assert.Contains(expectedOutput, output.ToString());
+            var expectedOutput = "Info";
+            Assert.Contains(expectedOutput, RemoveConsoleColorCodes(_consoleOutput.ToString()));
+        }
+
+        private string RemoveConsoleColorCodes(string input)
+        {
+            // Remove ANSI color codes (console color formatting) and trim extra whitespace
+            return System.Text.RegularExpressions.Regex.Replace(input, @"\u001b\[[0-9;]*m", string.Empty).Trim();
         }
     }
 }

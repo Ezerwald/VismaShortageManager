@@ -9,6 +9,10 @@
         /// <param name="length">The length of the separator line.</param>
         public static void SeparateMessage(char character = '-', int length = 20)
         {
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), "Length must be non-negative.");
+            }
             Console.WriteLine(new string(character, length));
         }
 
@@ -19,7 +23,7 @@
         public static void ShowInvalidInputResponse(string message = "Invalid option, please try again")
         {
             ShowWarningMessage(message);
-            Console.ReadKey();
+            Console.ReadLine();
         }
 
         /// <summary>

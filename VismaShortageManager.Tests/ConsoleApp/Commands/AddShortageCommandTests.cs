@@ -1,26 +1,62 @@
-﻿using Moq;
+﻿using System;
+using System.IO;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using VismaShortageManager.src.ConsoleApp.Commands;
 using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Interfaces;
 using VismaShortageManager.src.Domain.Models;
-using VismaShortageManager.src.Services;
+using Xunit;
 
 namespace VismaShortageManager.Tests.Commands
 {
-    public class AddShortageCommandTests
+    public class AddShortageCommandTests : IDisposable
     {
-        private readonly Mock<ShortageService> _shortageServiceMock;
+        private readonly Mock<IShortageRepository> _shortageRepositoryMock;
+        private readonly Mock<IShortageService> _shortageServiceMock;
         private readonly Mock<IInputParser> _inputParserMock;
         private readonly AddShortageCommand _addShortageCommand;
         private readonly User _testUser;
 
+        private StringWriter _consoleOutput;
+        private StringReader _consoleInput;
+
         public AddShortageCommandTests()
         {
-            _shortageServiceMock = new Mock<ShortageService>();
+            _shortageRepositoryMock = new Mock<IShortageRepository>();
+            _shortageServiceMock = new Mock<IShortageService>();
             _inputParserMock = new Mock<IInputParser>();
-            _addShortageCommand = new AddShortageCommand(_shortageServiceMock.Object, _inputParserMock.Object);
+
+            var services = new ServiceCollection();
+            services.AddSingleton(_shortageRepositoryMock.Object);
+            services.AddSingleton(_shortageServiceMock.Object);
+            services.AddSingleton(_inputParserMock.Object);
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            _addShortageCommand = new AddShortageCommand(
+                serviceProvider.GetRequiredService<IShortageService>(),
+                serviceProvider.GetRequiredService<IInputParser>()
+            );
+
             _testUser = new User { Name = "Test User", IsAdministrator = true };
             _addShortageCommand.SetUser(_testUser);
+
+            _consoleOutput = new StringWriter();
+            _consoleInput = new StringReader(string.Empty);
+            Console.SetOut(_consoleOutput);
+            Console.SetIn(_consoleInput);
+        }
+
+        public void Dispose()
+        {
+            _consoleOutput.Dispose();
+            _consoleInput.Dispose();
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput())
+            {
+                AutoFlush = true
+            });
+            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
         }
 
         [Fact]
@@ -62,9 +98,15 @@ namespace VismaShortageManager.Tests.Commands
             _shortageServiceMock.Setup(service => service.AddShortage(It.IsAny<Shortage>()))
                 .Throws(new Exception("Test Exception"));
 
-            // Act and Assert
-            var ex = Record.Exception(() => _addShortageCommand.Execute());
-            Assert.Null(ex); // No exception should propagate out of the Execute method
+            _consoleOutput = new StringWriter();
+            Console.SetOut(_consoleOutput);
+
+            // Act
+            _addShortageCommand.Execute();
+
+            // Assert
+            var output = _consoleOutput.ToString();
+            Assert.Contains("An error occurred: Test Exception", output);
         }
     }
 }

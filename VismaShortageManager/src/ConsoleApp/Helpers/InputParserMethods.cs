@@ -1,7 +1,12 @@
-﻿namespace VismaShortageManager.src.ConsoleApp.Helpers
+﻿using VismaShortageManager.src.Domain.Interfaces;
+
+namespace VismaShortageManager.src.ConsoleApp.Helpers
 {
     public static class InputParserMethods
     {
+
+        static readonly IInputParser InputParser = new InputParser();
+
         /// <summary>
         /// Prompts the user for a valid enum value by presenting a numbered list of options.
         /// </summary>
@@ -10,28 +15,7 @@
         /// <returns>The selected enum value.</returns>
         public static T ParseEnum<T>(string? prompt = null) where T : struct, Enum
         {
-            while (true)
-            {
-                if (!string.IsNullOrEmpty(prompt))
-                {
-                    Console.WriteLine(prompt);
-                }
-                Console.WriteLine($"Select {typeof(T).Name}:");
-
-                var enumValues = Enum.GetValues(typeof(T));
-                for (int i = 0; i < enumValues.Length; i++)
-                {
-                    Console.WriteLine($"{i + 1}. {enumValues.GetValue(i)}");
-                }
-
-                if (int.TryParse(Console.ReadLine(), out int selectedIndex) &&
-                    selectedIndex >= 1 && selectedIndex <= enumValues.Length)
-                {
-                    return (T)enumValues.GetValue(selectedIndex - 1);
-                }
-
-                Console.WriteLine("Invalid selection. Please try again.");
-            }
+            return InputParser.ParseEnum<T>(prompt);
         }
 
         /// <summary>
@@ -43,16 +27,7 @@
         /// <returns>The entered integer.</returns>
         public static int ParseIntInRange(string prompt, int min, int max)
         {
-            while (true)
-            {
-                Console.WriteLine(prompt);
-                if (int.TryParse(Console.ReadLine(), out int value) && value >= min && value <= max)
-                {
-                    return value;
-                }
-
-                Console.WriteLine($"Invalid input. Please enter a number between {min} and {max}.");
-            }
+            return InputParser.ParseIntInRange(prompt, min, max);
         }
 
         /// <summary>
@@ -62,17 +37,7 @@
         /// <returns>The entered string.</returns>
         public static string ParseNonEmptyString(string prompt)
         {
-            while (true)
-            {
-                Console.WriteLine(prompt);
-                var input = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(input))
-                {
-                    return input;
-                }
-
-                Console.WriteLine("Input cannot be empty. Please try again.");
-            }
+            return InputParser.ParseNonEmptyString(prompt);
         }
 
         /// <summary>
@@ -82,8 +47,7 @@
         /// <returns>The entered string.</returns>
         public static string ParseAnyString(string prompt)
         {
-            Console.WriteLine(prompt);
-            return Console.ReadLine();
+            return InputParser.ParseAnyString(prompt);
         }
 
         /// <summary>
@@ -93,21 +57,7 @@
         /// <returns>The entered boolean value.</returns>
         public static bool ParseBool(string prompt)
         {
-            while (true)
-            {
-                Console.WriteLine(prompt + " (yes/no)");
-                var input = Console.ReadLine().ToLower();
-                if (input == "yes")
-                {
-                    return true;
-                }
-                if (input == "no")
-                {
-                    return false;
-                }
-
-                Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
-            }
+            return InputParser.ParseBool(prompt);
         }
 
         /// <summary>
@@ -117,22 +67,7 @@
         /// <returns>The entered DateTime value, or null if the input is left empty.</returns>
         public static DateTime? ParseDateTime(string prompt)
         {
-            while (true)
-            {
-                Console.WriteLine(prompt);
-                var input = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(input))
-                {
-                    return null;
-                }
-
-                if (DateTime.TryParse(input, out var dateTime))
-                {
-                    return dateTime;
-                }
-
-                Console.WriteLine("Invalid date format. Please enter the date in the format yyyy-mm-dd.");
-            }
+           return InputParser.ParseDateTime(prompt);
         }
     }
 }

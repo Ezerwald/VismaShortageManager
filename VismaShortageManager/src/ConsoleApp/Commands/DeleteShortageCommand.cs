@@ -8,11 +8,11 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
 {
     public class DeleteShortageCommand : IConsoleCommand
     {
-        private readonly ShortageService _shortageService;
+        private readonly IShortageService _shortageService;
         private readonly IInputParser _inputParser;
         private User _currentUser;
 
-        public DeleteShortageCommand(ShortageService shortageService, IInputParser inputParser)
+        public DeleteShortageCommand(IShortageService shortageService, IInputParser inputParser)
         {
             _shortageService = shortageService;
             _inputParser = inputParser;
@@ -60,8 +60,7 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                     switch (choice)
                     {
                         case 1:
-                            Execute();
-                            shouldContinue = false;
+                            DeleteOneMoreShortage();
                             break;
                         case 2:
                             shouldContinue = false;
@@ -71,6 +70,20 @@ namespace VismaShortageManager.src.ConsoleApp.Commands
                             break;
                     }
                 });
+            }
+        }
+        private void DeleteOneMoreShortage()
+        {
+            try
+            {
+                var (title, room) = GetShortageDetails();
+                _shortageService.DeleteShortage(title, room, _currentUser);
+                UIHelper.SeparateMessage();
+                ShowPostActionMenu();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
     }

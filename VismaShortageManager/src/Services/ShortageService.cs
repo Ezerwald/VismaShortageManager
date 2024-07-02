@@ -5,7 +5,7 @@ using VismaShortageManager.src.Domain.Models;
 
 namespace VismaShortageManager.src.Services
 {
-    public class ShortageService
+    public class ShortageService : IShortageService
     {
         private readonly IShortageRepository _repository;
 

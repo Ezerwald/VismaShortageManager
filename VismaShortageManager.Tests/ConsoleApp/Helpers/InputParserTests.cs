@@ -1,15 +1,35 @@
 ﻿using VismaShortageManager.src.ConsoleApp.Helpers;
 using VismaShortageManager.src.Domain.Enums;
+using System;
+using System.IO;
+using Xunit;
 
 namespace VismaShortageManager.Tests.Helpers
 {
-    public class InputParserTests
+    public class InputParserTests : IDisposable
     {
         private readonly InputParser _inputParser;
+        private StringWriter _consoleOutput;
+        private StringReader _consoleInput;
 
         public InputParserTests()
         {
             _inputParser = new InputParser();
+            _consoleOutput = new StringWriter();
+            _consoleInput = new StringReader(string.Empty);
+            Console.SetOut(_consoleOutput);
+            Console.SetIn(_consoleInput);
+        }
+
+        public void Dispose()
+        {
+            _consoleOutput.Dispose();
+            _consoleInput.Dispose();
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput())
+            {
+                AutoFlush = true
+            });
+            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
         }
 
         [Fact]
@@ -17,8 +37,10 @@ namespace VismaShortageManager.Tests.Helpers
         {
             // Arrange
             var input = "1\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseEnum<RoomType>("Select a room:");
@@ -32,8 +54,10 @@ namespace VismaShortageManager.Tests.Helpers
         {
             // Arrange
             var input = "5\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseIntInRange("Enter a number between 1 and 10:", 1, 10);
@@ -47,8 +71,10 @@ namespace VismaShortageManager.Tests.Helpers
         {
             // Arrange
             var input = "Test String\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseNonEmptyString("Enter a non-empty string:");
@@ -62,8 +88,10 @@ namespace VismaShortageManager.Tests.Helpers
         {
             // Arrange
             var input = "Any String\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseAnyString("Enter any string:");
@@ -77,8 +105,10 @@ namespace VismaShortageManager.Tests.Helpers
         {
             // Arrange
             var input = "yes\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseBool("Is it true?");
@@ -92,8 +122,10 @@ namespace VismaShortageManager.Tests.Helpers
         {
             // Arrange
             var input = "no\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseBool("Is it true?");
@@ -106,15 +138,17 @@ namespace VismaShortageManager.Tests.Helpers
         public void ParseDateTime_ShouldReturnDateTime()
         {
             // Arrange
-            var input = "2023-01-01\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            var input = "2005-11-16\n";
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseDateTime("Enter a date:");
 
             // Assert
-            Assert.Equal(new DateTime(2023, 1, 1), result);
+            Assert.Equal(new DateTime(2005, 11, 16), result);
         }
 
         [Fact]
@@ -122,8 +156,10 @@ namespace VismaShortageManager.Tests.Helpers
         {
             // Arrange
             var input = "\n";
-            var inputReader = new StringReader(input);
-            Console.SetIn(inputReader);
+            _consoleInput = new StringReader(input);
+            _consoleOutput = new StringWriter();
+            Console.SetIn(_consoleInput);
+            Console.SetOut(_consoleOutput);
 
             // Act
             var result = _inputParser.ParseDateTime("Enter a date:");

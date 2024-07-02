@@ -4,11 +4,13 @@ using VismaShortageManager.src.Domain.Enums;
 using VismaShortageManager.src.Domain.Models;
 using VismaShortageManager.src.Services;
 using VismaShortageManager.src.Domain.Interfaces;
+using Xunit;
 
 namespace VismaShortageManager.Tests.Commands
 {
     public class ListShortagesCommandTests
     {
+        private readonly Mock<IShortageRepository> _shortageRepositoryMock;
         private readonly Mock<ShortageService> _shortageServiceMock;
         private readonly Mock<DeleteShortageCommand> _deleteShortageCommandMock;
         private readonly Mock<IInputParser> _inputParserMock;
@@ -17,9 +19,10 @@ namespace VismaShortageManager.Tests.Commands
 
         public ListShortagesCommandTests()
         {
-            _shortageServiceMock = new Mock<ShortageService>();
-            _deleteShortageCommandMock = new Mock<DeleteShortageCommand>(_shortageServiceMock.Object);
+            _shortageRepositoryMock = new Mock<IShortageRepository>();
+            _shortageServiceMock = new Mock<ShortageService>(_shortageRepositoryMock.Object);
             _inputParserMock = new Mock<IInputParser>();
+            _deleteShortageCommandMock = new Mock<DeleteShortageCommand>(_shortageServiceMock.Object, _inputParserMock.Object);
             _listShortagesCommand = new ListShortagesCommand(_shortageServiceMock.Object, _deleteShortageCommandMock.Object, _inputParserMock.Object);
             _testUser = new User { Name = "Test User", IsAdministrator = true };
             _listShortagesCommand.SetUser(_testUser);
@@ -58,8 +61,8 @@ namespace VismaShortageManager.Tests.Commands
         [Fact]
         public void AddFilter_ShouldAddDateRangeFilter()
         {
-            var startDate = new DateTime(2023, 1, 1);
-            var endDate = new DateTime(2023, 12, 31);
+            var startDate = new DateTime(2005, 11, 16);
+            var endDate = new DateTime(2006, 11, 23);
 
             _inputParserMock.SetupSequence(x => x.ParseDateTime(It.IsAny<string>()))
                 .Returns(startDate)
