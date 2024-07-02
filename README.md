@@ -2,10 +2,10 @@
 
 ## Overview
 
-VismaShortageManager is a console application designed to help manage and track shortages in various categories and rooms. It provides functionality to add, list, and delete shortages, as well as apply filters to view specific subsets of shortages. The application utilizes dependency injection via `Microsoft.Extensions.DependencyInjection` for better modularity and testability. Comprehensive unit tests are provided to ensure the reliability of the application.
+VismaShortageManager is a console application designed to help manage and track shortages in various categories and rooms. It provides functionality to add, list, and delete shortages, as well as apply filters to view specific subsets of shortages. The application stores shortages inforamtion in JSON file and retains data between restarts. The program utilizes dependency injection via `Microsoft.Extensions.DependencyInjection` for better modularity and testability. Comprehensive unit tests are provided to ensure the reliability of the application.
 
-## Disclaimer
-This project is not affiliated with any company and any product. It is a test task created by a student.
+### Disclaimer
+*This project is not affiliated with any company and any product. It is a test task created by a student.*
 
 ## Features
 
@@ -101,4 +101,8 @@ public class DeleteShortageCommandTests
 
 // Other test classes...
 ```
+
+## Summary
+
+This project is designed to manage shortages within a system using C# and .NET technologies. It utilizes the Command and Repository patterns to maintain separation of concerns and facilitate extensibility. The Command pattern encapsulates actions as objects through IConsoleCommand, allowing flexible command execution. The Repository pattern abstracts data access via IShortageRepository, ensuring clear separation between business logic and data storage. Dependency injection using Microsoft.Extensions.DependencyInjection enhances modularity and testability. Unit testing with xUnit and Moq validates functionality and ensures reliability. This project serves as a demonstration of structured software design and effective testing practices.
 
